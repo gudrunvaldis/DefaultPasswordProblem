@@ -195,14 +195,13 @@ def main():
 				correctPass = x[2]
 
 				newPass = changePassword(correctIP, 23, correctUsr, correctPass)
-				#obj_json = {u"IPaddress":ip, u"port":23, u"defaultUsr":user, u"defaultPass":password, u"newPass":newPass}
+				
 				if newPass != 0:
 					obj_json = {ip:{u"port":23, u"defaultUsr":user, u"defaultPass":password, u"newPass":newPass}}
 					deviceList.append(obj_json)
 				else:
 					obj_json = {ip:{u"port":23, u"defaultUsr":"N/A", u"defaultPass":"N/A", u"newPass":"N/A"}}
 					deviceList.append(obj_json)
-				#print(json.dumps(obj_json))
 
 			devices.close()
 		if success == 0:
@@ -231,21 +230,13 @@ def main():
 		finalIP = ipParsed[0]+'.'+ipParsed[1]+'.'+ipParsed[2]+'.'+ipParsed[3]
 		# IP address range based on the IP address of the current device
 		finalIPrange = ipParsed[0]+'.'+ipParsed[1]+'.'+ipParsed[2]+'.0/24'
-
-
-		# call bash command to run ZMap on the network
-		#subprocess.call(["./zmap", "-p", p, "-o", "IPaddresses.txt", finalIPrange]) # for Raspberry Pi
-		
+	
 		# Scan network using nmap on the specified IP range on ports 22 or 23
 		nm = nmap.PortScanner()
-		#nm.scan(finalIPrange, 22-23)
 		host = nm.scan(finalIPrange, p)
-		#print host
-		#print finalIPrange
 		hosts = nm.all_hosts() # get all hosts that were scanned (including the current machine)
-		#print hosts
+
 		for host in hosts:
-			#print host
 			# to prevent that they try to change the password of the current device, keep?
 			if host != finalIP:
 				if p.strip() == '22':
@@ -271,9 +262,8 @@ def main():
 	# call dumps on the whole list of all devices
 	print json.dumps(deviceList)
 
-	#nmapIPs.close()
 	ports.close()
-	#userpass.close()
+	userpass.close()
 	successes.close()
 
 main()
