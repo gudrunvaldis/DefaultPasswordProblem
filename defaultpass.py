@@ -1,13 +1,11 @@
 #found in /usr/local/sbin/
 
-#import getpass
 import socket
 import sys
 import telnetlib
 import paramiko
 import subprocess
-from subprocess import call, check_output
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import call, check_output, Popen, PIPE, STDOUT
 import json
 from paramiko.ssh_exception import AuthenticationException, SSHException, NoValidConnectionsError
 import time
@@ -17,14 +15,10 @@ from itertools import izip
 import nmap
 
 def changePassword(ip, port, user, password):
-	#newPass = 'hello1234'
-
 	# generate a random password
 	N = 12
 	newPass = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(N))
-	print "random: "+ newPass
-
-	return newPass # for testing on home network 
+	#print "random: "+ newPass
 
 	#establish ssh connection
 	if port == 22:
@@ -41,7 +35,6 @@ def changePassword(ip, port, user, password):
 			stdin.write(newPass+'\n')
 			stdin.flush()
 			exit = 1
-			#print "try"
 			return newPass
 		except AuthenticationException:
 			print "exception 1"
@@ -86,7 +79,7 @@ def changePassword(ip, port, user, password):
 def main():
 	
 	ports = open('ports.txt', 'r') # testing with only 22 or 23 on there
-	#userpass = open('defuserpass.txt', 'r') # actual file
+	userpass = open('defuserpass.txt', 'r') # actual file
 	#userpass = open('testpass.txt', 'r') # for testing
 	successes = open('success.txt', 'w')
 	deviceList = []
