@@ -27,26 +27,25 @@ def changePassword(ip, port, user, password):
 	return newPass # for testing on home network 
 
 	#establish ssh connection
-	#COMMENTED OUT FOR TESTING
-	# if port == 22:
-	# 	ssh = paramiko.SSHClient()
-	# 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	# 	try:
-	# 		# log onto device
-	# 		ssh.connect(ip, username=user, password=password)
-	# 		print "in here"
-	# 		# change the password of the device
-	# 		stdin, stdout, stderr = ssh.exec_command("passwd")
-	# 		stdin.write(password+'\n')
-	# 		stdin.write(newPass+'\n')
-	# 		stdin.write(newPass+'\n')
-	# 		stdin.flush()
-	# 		exit = 1
-	# 		#print "try"
-	# 		return newPass
-	# 	except AuthenticationException:
-	# 		print "exception 1"
-	# 		return 0
+	if port == 22:
+		ssh = paramiko.SSHClient()
+		ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+		try:
+			# log onto device
+			ssh.connect(ip, username=user, password=password)
+			print "in here"
+			# change the password of the device
+			stdin, stdout, stderr = ssh.exec_command("passwd")
+			stdin.write(password+'\n')
+			stdin.write(newPass+'\n')
+			stdin.write(newPass+'\n')
+			stdin.flush()
+			exit = 1
+			#print "try"
+			return newPass
+		except AuthenticationException:
+			print "exception 1"
+			return 0
 	# elif port == 23:
 	# 	# try to establish a telnet connection using a default username password combination
 	# 	p = Popen(["telnet", "-l", user, ip],stdin=PIPE,stdout=PIPE,stderr=PIPE)
@@ -276,18 +275,7 @@ def main():
 			for ip in telnetDevices:
 				options[23](ip.strip())
 
-
-		#nmapIPs = open('nmap.txt', 'r')
-		# for ip in nmapIPs: 
-		# 	# for ssh port:
-		# 	if p == '22':
-		# 		options[22](ip.strip())
-		# 	# for telnet port:
-		# 	if p == '23':
-		# 		options[23](ip.strip())
-
 	# call dumps on the whole list of all devices
-
 	print json.dumps(deviceList)
 
 	#nmapIPs.close()
